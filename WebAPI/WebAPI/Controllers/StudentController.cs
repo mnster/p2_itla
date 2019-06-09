@@ -8,6 +8,7 @@ using Service;
 
 namespace WebAPI.Controllers
 {
+    [Route("[controller]")]
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
