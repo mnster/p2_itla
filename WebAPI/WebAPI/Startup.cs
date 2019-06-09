@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Service;
 
 namespace WebAPI
 {
@@ -29,6 +30,7 @@ namespace WebAPI
         {
             var connection = Configuration.GetConnectionString("Dev");
             services.AddDbContext<StudentDbContext> (options => options.UseSqlServer(connection));
+            services.AddTransient<IStudentService, StudentService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
