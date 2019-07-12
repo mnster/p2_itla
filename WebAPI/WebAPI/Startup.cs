@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Service;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace WebAPI
 {
@@ -32,6 +33,19 @@ namespace WebAPI
             services.AddDbContext<StudentDbContext> (options => options.UseSqlServer(connection));
             services.AddTransient<IStudentService, StudentService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSwaggerGen(swagger =>
+            {
+                var contact = new Contact() { Name = SwaggerConfiguration.ContactName, Url = SwaggerConfiguration.ContactUrl };
+                swagger.SwaggerDoc(SwaggerConfiguration.DocNameV1,
+                    new Info
+                    {
+                        Title = SwaggerConfiguration.DocInfoTitle,
+                        Version = SwaggerConfiguration.DocInfoVersion,
+                        Description = SwaggerConfiguration.DocInfoDescription,
+                        Contact = contact
+                    }
+                );
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +59,16 @@ namespace WebAPI
             {
                 app.UseHsts();
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint(SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.EndpointDescription);
+            });
+
 
             app.UseHttpsRedirection();
             app.UseMvc(routes =>
