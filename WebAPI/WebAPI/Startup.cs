@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -45,6 +46,10 @@ namespace WebAPI
                         Contact = contact
                     }
                 );
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, "WebApiEasySwagger.xml");
+                swagger.IncludeXmlComments(xmlPath);
             });
         }
 
